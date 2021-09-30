@@ -12,13 +12,13 @@ const Add = () => {
     const history = useHistory()
     return (
         <UserContext.Consumer>
-            {({userid,url,setLoad})=>(
+            {({userid,url})=>(
                 <View style={styles.container}>
                     <StatusBar style="auto"/>
                     <Text h4>Create List Item</Text>
                     <Input placeholder="Title..." onChangeText={(e)=>setTitle(e)}/>
                     <Input placeholder="Content..." onChangeText={(e)=>setContent(e)}/>
-                    <Button title="Save" raised onPress={async()=>{
+                    <Button title="Create" raised onPress={()=>{
                         try {
                             const fdata = {
                                 userid: userid,
@@ -28,13 +28,12 @@ const Add = () => {
                             if(title == '' || content == ''){
                                 alert('Form is empty')
                             }else{
-                                await axios.post(`${url}/api/article`,fdata).then(()=>{
-                                    setLoad(true)
+                                axios.post(`${url}/api/article`,fdata).then(()=>{
                                     history.push('/')
                                 })
                             }
                         } catch (error) {
-                            alert(error)
+                            console.log(error);
                         }
                     }}/>
                 </View>
@@ -48,6 +47,7 @@ export default Add
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        marginTop: 20
+        marginTop: 20,
+        paddingTop:100
     },
 })

@@ -23,7 +23,7 @@ const Detail = () => {
     },[])
     return (
         <UserContext.Consumer>
-            {({userid,setLoad})=>(
+            {({userid})=>(
                 <View style={styles.container}>
                     <ScrollView>
                         {article.map((l,i)=>(
@@ -39,7 +39,6 @@ const Detail = () => {
                                         }}/>
                                         <Button title="Delete" type="clear" onPress={()=>{
                                             axios.delete(`${url}/api/article/${l.id}`).then(()=>{
-                                                setLoad(true)
                                                 history.push('/')
                                             })
                                         }}/>

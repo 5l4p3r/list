@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -7,7 +8,7 @@ import { UserContext } from '../hooks/UserContext'
 const Profile = () => {
     return (
         <UserContext.Consumer>
-            {({userid,name,photo,url})=>(
+            {({name,photo,url})=>(
                 <View style={styles.container}>
                     <StatusBar style="auto"/>
                     <Image source={{ uri: `${url}/img/${photo}` }} style={styles.img}/>

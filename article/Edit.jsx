@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Button, Input } from 'react-native-elements'
+import { StyleSheet, View } from 'react-native'
+import { Button, Input, Text } from 'react-native-elements'
 import { useHistory, useParams } from 'react-router'
 import { UserContext } from '../hooks/UserContext'
 
@@ -29,7 +29,7 @@ const Edit = () => {
     },[])
     return (
         <UserContext.Consumer>
-            {({setLoad})=>(
+            {({})=>(
                 <View style={styles.container}>
                     {article.map((l,i)=>(
                         <View key={i}>
@@ -47,7 +47,6 @@ const Edit = () => {
                                         alert('Form is empty')
                                     }else{
                                         await axios.post(`${url}/api/article/edit`,fdata).then(()=>{
-                                            setLoad(true)
                                             history.push(`/article/${id}`)
                                         })
                                     }
@@ -68,6 +67,7 @@ export default Edit
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        marginTop: 20
+        marginTop: 20,
+        paddingTop:100
     },
 })
