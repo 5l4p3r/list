@@ -9,6 +9,7 @@ const Detail = () => {
     const url = "https://sanctumtyo.herokuapp.com"
     const {id} = useParams()
     const [article,setArticle] = useState([])
+    const [userid, setUserid] = useState(null)
     const getArticle = async() => {
         try {
             let res = await axios.get(`${url}/api/article/${id}`)
@@ -23,7 +24,7 @@ const Detail = () => {
     },[])
     return (
         <UserContext.Consumer>
-            {({userid})=>(
+            {({user})=>(
                 <View style={styles.container}>
                     <ScrollView>
                         {article.map((l,i)=>(
@@ -32,22 +33,25 @@ const Detail = () => {
                                 <Divider/>
                                 <Text style={styles.paragraf}>{l.content}</Text>
                                 <Divider/>
-                                {userid === l.userid && 
-                                    <View style={styles.group}>
-                                        <Button title="Edit" type="clear" onPress={()=>{
-                                            history.push(`/articleupdate/${l.id}`)
-                                        }}/>
-                                        <Button title="Delete" type="clear" onPress={()=>{
-                                            axios.delete(`${url}/api/article/${l.id}`).then(()=>{
-                                                history.push('/')
-                                            })
-                                        }}/>
-                                    </View>
-                                }
+                                {user.map((item)=>{
+                                    if(item.id === l.id){
+                                        return (
+                                            <View style={styles.group}>
+                                                <Button title="Edit" type="clear" onPress={()=>{
+                                                    history.push(`/articleupdate/${l.id}`)
+                                                }}/>
+                                                <Button title="Delete" type="clear" onPress={()=>{
+                                                    axios.delete(`${url}/api/article/${l.id}`).then(()=>{
+                                                        history.push('/')
+                                                    })
+                                                }}/>
+                                            </View>
+                                        )
+                                    }
+                                })}
                             </View>
                         ))}
-                    </ScrollView>
-                    
+                    </ScrollView>                  
                 </View>
             )}
         </UserContext.Consumer>

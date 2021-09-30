@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -8,11 +7,15 @@ import { UserContext } from '../hooks/UserContext'
 const Profile = () => {
     return (
         <UserContext.Consumer>
-            {({name,photo,url})=>(
+            {({url,user})=>(
                 <View style={styles.container}>
-                    <StatusBar style="auto"/>
-                    <Image source={{ uri: `${url}/img/${photo}` }} style={styles.img}/>
-                    <Text h4>{name}</Text>
+                    {user.map((item,i)=>(
+                        <View key={i} style={styles.container}>
+                            <StatusBar style="auto"/>
+                            <Image source={{ uri: `${url}/img/${item.photo}` }} style={styles.img}/>
+                            <Text h4>{item.name}</Text>
+                        </View>
+                    ))}
                 </View>
             )}
         </UserContext.Consumer>

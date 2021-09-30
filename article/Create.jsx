@@ -4,16 +4,17 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, Input, Text } from 'react-native-elements'
 import { useHistory } from 'react-router'
-import { UserContext } from '../hooks/UserContext'
+import { ArticleContext } from '../hooks/ArticleContext'
 
-const Add = () => {
+const Create = () => {
     const [title,setTitle] = useState('')
     const [content, setContent] = useState('')
+    const [userid, setUserid] = useState(0)
     const history = useHistory()
     return (
-        <UserContext.Consumer>
-            {({url,user})=>{user.map((item,i)=>(
-                <View key={i} style={styles.container}>
+        <ArticleContext.Consumer>
+            {({setLoad})=>(
+                <View style={styles.container}>
                     <StatusBar style="auto"/>
                     <Text h4 style={{marginBottom: '20px'}}>Create List Item</Text>
                     <Input placeholder="Title..." onChangeText={(e)=>setTitle(e)}/>
@@ -25,7 +26,7 @@ const Add = () => {
                     <Button title="Create" raised onPress={async()=>{
                         try {
                             const fdata = {
-                                userid: item.id,
+                                userid: userid,
                                 title: title,
                                 content: content
                             }
@@ -33,6 +34,7 @@ const Add = () => {
                                 alert('Form is empty')
                             }else{
                                 await axios.post(`${url}/api/article`,fdata).then(()=>{
+                                    setLoad(true)
                                     history.push('/')
                                 })
                             }
@@ -41,12 +43,12 @@ const Add = () => {
                         }
                     }}/>
                 </View>
-            ))}}
-        </UserContext.Consumer>
+            )}
+        </ArticleContext.Consumer>
     )
 }
 
-export default Add
+export default Create
 
 const styles = StyleSheet.create({
     container:{

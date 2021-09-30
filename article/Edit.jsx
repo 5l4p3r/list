@@ -28,37 +28,39 @@ const Edit = () => {
         getArticle()
     },[])
     return (
-        <UserContext.Consumer>
-            {({})=>(
-                <View style={styles.container}>
-                    {article.map((l,i)=>(
-                        <View key={i}>
-                            <Text h4>Edit List Item</Text>
-                            <Input placeholder="Title" defaultValue={`${l.title}`} onChangeText={(e)=>setTitle(e)}/>
-                            <Input placeholder="Content" defaultValue={`${l.content}`} onChangeText={(e)=>setContent(e)}/>
-                            <Button title="Save" raised onPress={async()=>{
-                                try {
-                                    const fdata = {
-                                        id: id,
-                                        title: title,
-                                        content: content
-                                    }
-                                    if(title == '' || content == ''){
-                                        alert('Form is empty')
-                                    }else{
-                                        await axios.post(`${url}/api/article/edit`,fdata).then(()=>{
-                                            history.push(`/article/${id}`)
-                                        })
-                                    }
-                                } catch (error) {
-                                    alert(error)
-                                }
-                            }}/>
-                        </View>
-                    ))}
+        <View style={styles.container}>
+            {article.map((l,i)=>(
+                <View key={i}>
+                    <Text h4 style={styles.title}>Edit List Item</Text>
+                    <Input underlineColorAndroid='transparent' placeholder="Title" defaultValue={`${l.title}`} onChangeText={(e)=>setTitle(e)}/>
+                    <Input 
+                        placeholder="Content"
+                        underlineColorAndroid='transparent'
+                        multiline={true}
+                        numberOfLines={5}
+                        defaultValue={`${l.content}`} 
+                        onChangeText={(e)=>setContent(e)}/>
+                    <Button title="Save" raised onPress={async()=>{
+                        try {
+                            const fdata = {
+                                id: id,
+                                title: title,
+                                content: content
+                            }
+                            if(title == '' || content == ''){
+                                alert('Form is empty')
+                            }else{
+                                await axios.post(`${url}/api/article/edit`,fdata).then(()=>{
+                                    history.push(`/article/${id}`)
+                                })
+                            }
+                        } catch (error) {
+                            alert(error)
+                        }
+                    }}/>
                 </View>
-            )}
-        </UserContext.Consumer>
+            ))}
+        </View>
     )
 }
 
@@ -68,6 +70,10 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         marginTop: 20,
-        paddingTop:100
+        paddingTop:100,
+        paddingHorizontal: 10
     },
+    title: {
+        marginHorizontal: 10
+    }
 })
