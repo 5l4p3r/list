@@ -8,7 +8,6 @@ import { UserContext } from '../hooks/UserContext'
 
 const Setting = () => {
     const [vis,setVis] = useState(false)
-    const [clear, setClear] = useState(false)
     const keluar = async() => {
         try {
             AsyncStorage.removeItem('key')
@@ -26,7 +25,8 @@ const Setting = () => {
                 <View style={styles.container}>
                     <StatusBar style="auto"/>
                     <View style={styles.logout}>
-                        <FAB title="Logout" 
+                        <FAB title="Logout"
+                            type='clear'
                             onPress={()=>{setVis(true)
                         }}/>
                     </View>
@@ -73,5 +73,5 @@ const styles = StyleSheet.create({
     },
     groupItem: {
         marginHorizontal: 30
-    }
+    },
 })

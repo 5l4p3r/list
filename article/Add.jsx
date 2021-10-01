@@ -1,7 +1,6 @@
 import axios from 'axios'
-import { StatusBar } from 'expo-status-bar'
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button, Input, Text } from 'react-native-elements'
 import { useHistory } from 'react-router'
 import { UserContext } from '../hooks/UserContext'
@@ -12,36 +11,38 @@ const Add = () => {
     const history = useHistory()
     return (
         <UserContext.Consumer>
-            {({url,user})=>{user.map((item,i)=>(
-                <View key={i} style={styles.container}>
-                    <StatusBar style="auto"/>
-                    <Text h4 style={{marginBottom: '20px'}}>Create List Item</Text>
-                    <Input placeholder="Title..." onChangeText={(e)=>setTitle(e)}/>
-                    <Input
-                        placeholder="Content..."
-                        multiline={true}
-                        numberOfLines={5}
-                        onChangeText={(e)=>setContent(e)}/>
-                    <Button title="Create" raised onPress={async()=>{
-                        try {
-                            const fdata = {
-                                userid: item.id,
-                                title: title,
-                                content: content
-                            }
-                            if(title == '' || content == ''){
-                                alert('Form is empty')
-                            }else{
-                                await axios.post(`${url}/api/article`,fdata).then(()=>{
+            {({url,userid})=>(
+                <ScrollView>
+                    <View style={styles.container}>
+                        <Text h4 style={styles.title}>Create List</Text>
+                        <Input
+                            placeholder="Title..."
+                            onChangeText={e=>setTitle(e)}
+                        />
+                        <Input 
+                            placeholder="Content..."
+                            multiline={true}
+                            numberOfLines={4}
+                            onChangeText={e=>setContent(e)}
+                        />
+                        <Button title="CREATE" type="outline" onPress={async()=>{
+                            try {
+                                const fdata = {
+                                    userid: userid,
+                                    title: title,
+                                    content: content
+                                }
+                                await axios.post(`${url}/api/article`,fdata).then((res)=>{
+                                    alert("List Created")
                                     history.push('/')
                                 })
+                            } catch (error) {
+                                alert("Failed");
                             }
-                        } catch (error) {
-                            console.log(error);
-                        }
-                    }}/>
-                </View>
-            ))}}
+                        }}/>
+                    </View>
+                </ScrollView>
+            )}
         </UserContext.Consumer>
     )
 }
@@ -51,7 +52,11 @@ export default Add
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        marginTop: 20,
-        paddingTop:100
+        justifyContent:'center',
+        alignItems:'center',
+        paddingHorizontal:10
     },
+    title: {
+        marginVertical:20
+    }
 })

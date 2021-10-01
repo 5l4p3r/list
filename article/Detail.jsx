@@ -9,13 +9,12 @@ const Detail = () => {
     const url = "https://sanctumtyo.herokuapp.com"
     const {id} = useParams()
     const [article,setArticle] = useState([])
-    const [userid, setUserid] = useState(null)
     const getArticle = async() => {
         try {
             let res = await axios.get(`${url}/api/article/${id}`)
             setArticle(res.data)
         } catch (error) {
-            alert(error)
+            console.log(error);
         }
     }
     const history = useHistory()
@@ -24,35 +23,29 @@ const Detail = () => {
     },[])
     return (
         <UserContext.Consumer>
-            {({user})=>(
-                <View style={styles.container}>
-                    <ScrollView>
-                        {article.map((l,i)=>(
-                            <View key={i}>
-                                <Text h3 style={styles.title}>{l.title}</Text>
-                                <Divider/>
-                                <Text style={styles.paragraf}>{l.content}</Text>
-                                <Divider/>
-                                {user.map((item)=>{
-                                    if(item.id === l.id){
-                                        return (
-                                            <View style={styles.group}>
-                                                <Button title="Edit" type="clear" onPress={()=>{
-                                                    history.push(`/articleupdate/${l.id}`)
-                                                }}/>
-                                                <Button title="Delete" type="clear" onPress={()=>{
-                                                    axios.delete(`${url}/api/article/${l.id}`).then(()=>{
-                                                        history.push('/')
-                                                    })
-                                                }}/>
-                                            </View>
-                                        )
-                                    }
-                                })}
+            {({userid})=>(
+                <ScrollView>
+                {article.map((l,i)=>(
+                    <View key={i} style={styles.container}>
+                        <Text h3 style={styles.title}>{l.title}</Text>
+                        <Divider/>
+                        <Text style={styles.paragraf}>{l.content}</Text>
+                        <Divider/>
+                        {l.userid === userid && 
+                            <View style={styles.group}>
+                                <Button title="Edit" type="clear" onPress={()=>{
+                                    history.push(`/articleupdate/${l.id}`)
+                                }}/>
+                                <Button style={{borderColor:'red'}} title="Delete" type="clear" onPress={()=>{
+                                    axios.delete(`${url}/api/article/${l.id}`).then(()=>{
+                                        history.push('/')
+                                    })
+                                }}/>
                             </View>
-                        ))}
-                    </ScrollView>                  
-                </View>
+                        }
+                    </View>
+                ))}
+            </ScrollView>
             )}
         </UserContext.Consumer>
     )
@@ -65,7 +58,9 @@ const styles = StyleSheet.create({
         flex:1,
         paddingTop:30,
         paddingBottom:20,
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        justifyContent:'flex-start',
+        alignItems:'flex-start'
     },
     group: {
         marginTop: 20,

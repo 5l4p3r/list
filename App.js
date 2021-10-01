@@ -11,7 +11,8 @@ import Home from './page/Home'
 import Profile from './page/Profile'
 import Setting from './page/Setting'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Create from './article/Create'
+import Add from './article/Add'
+import { StatusBar } from 'expo-status-bar'
 
 const App = () => {
   const url = "https://sanctumtyo.herokuapp.com"
@@ -20,6 +21,7 @@ const App = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState([])
+  const [userid, setUserid] = useState(null)
 
   const login = async() => {
     try {
@@ -27,22 +29,38 @@ const App = () => {
         email: email,
         password: password
       }
+      await AsyncStorage.setItem("email", email)
+      await AsyncStorage.setItem("password", password)
       await axios.post(`${url}/api/login`,fdata).then(async(res)=>{
         setMessage(res.data.message)
         await AsyncStorage.setItem("key", res.data.message)
         let resp = await axios.get(`${url}/api/profile/${res.data.id}`)
         setUser(resp.data)
+        resp.data.map(async(item)=>{
+          await AsyncStorage.setItem('@id',JSON.stringify(item.id))
+          setUserid(item.id)
+        })
         await AsyncStorage.setItem('@user',JSON.stringify(resp.data))
       })
       
     } catch (error) {
-      alert(error)
+      console.log(error);
     }
   }
   
    
   const storage = async() => {
     try {
+      let email = await AsyncStorage.getItem("email")
+      if(email !== null){
+        setEmail(email)
+      }
+
+      let password = await AsyncStorage.getItem("password")
+      if(password !== null){
+        setPassword(password)
+      }
+
       let key = await AsyncStorage.getItem("key")
       if(key !== null){
         setMessage(key)
@@ -51,6 +69,11 @@ const App = () => {
       let user = await AsyncStorage.getItem('@user')
       if(user !== null){
         setUser(JSON.parse(user))
+      }
+
+      let userid = await AsyncStorage.getItem('@id')
+      if(userid !== null){
+        setUserid(JSON.parse(userid))
       }
 
     } catch (error) {
@@ -69,13 +92,14 @@ const App = () => {
         url: url,
         setMessage: setMessage,
         user: user,
+        userid: userid,
       }}>
         <NativeRouter>
           <Route exact path="/" component={Home}/>
           <Route path="/profile" component={Profile}/>
           <Route path="/about" component={About}/>
           <Route path="/setting" component={Setting}/>
-          <Route path="/article/add" component={Create}/>
+          <Route path="/article/add" component={Add}/>
           <Route path="/article/:id" component={Detail}/>
           <Route path="/articleupdate/:id" component={Edit}/>
           <View style={styles.nav}>
@@ -98,16 +122,17 @@ const App = () => {
   }else{
     return (
       <View style={styles.container}>
+        <StatusBar style="auto" />
         <Icon name="wordfile1" size={76} type="antdesign"/>
         <Text h4>Login System</Text>
         <Input 
           placeholder="Email"
-          leftIcon={<Icon name='mail' type="antdesign" size={24}/>}
+          leftIcon={<Icon name='mail' type="antdesign" size={30}/>}
           value={email}
           onChangeText={(e)=>setEmail(e)}/>
         <Input placeholder="Password" secureTextEntry={show}
-          leftIcon={<Icon name='key' type="antdesign" size={24}/>}
-          rightIcon={<Icon name="eye" type="antdesign" size={24} onPress={()=>{
+          leftIcon={<Icon name='key' type="antdesign" size={30}/>}
+          rightIcon={<Icon name="eye" type="antdesign" size={30} onPress={()=>{
             if(show){
               setShow(false)
             }else{
@@ -116,7 +141,7 @@ const App = () => {
           }} />}
           value={password}
           onChangeText={(e)=>setPassword(e)}/>
-        <Button title="Logn" type="clear" onPress={()=>login()}/>
+        <Button title="LOGIN" type="clear" onPress={()=>login()}/>
       </View>
     )
   }
@@ -132,11 +157,12 @@ const styles = StyleSheet.create({
   },
   nav: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems:'center',
     height: 40,
     position:'relative',
-    marginBottom:10
+    marginBottom:10,
+    marginHorizontal:10
   },
   navItem: {
     backgroundColor:'red'

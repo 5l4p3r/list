@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button, Input, Text } from 'react-native-elements'
 import { useHistory, useParams } from 'react-router'
 import { UserContext } from '../hooks/UserContext'
@@ -28,19 +28,19 @@ const Edit = () => {
         getArticle()
     },[])
     return (
-        <View style={styles.container}>
+        <ScrollView>
             {article.map((l,i)=>(
-                <View key={i}>
+                <View key={i} style={styles.container}>
                     <Text h4 style={styles.title}>Edit List Item</Text>
                     <Input underlineColorAndroid='transparent' placeholder="Title" defaultValue={`${l.title}`} onChangeText={(e)=>setTitle(e)}/>
                     <Input 
                         placeholder="Content"
                         underlineColorAndroid='transparent'
                         multiline={true}
-                        numberOfLines={5}
+                        numberOfLines={4}
                         defaultValue={`${l.content}`} 
                         onChangeText={(e)=>setContent(e)}/>
-                    <Button title="Save" raised onPress={async()=>{
+                    <Button title="UPDATE" type="outline" onPress={async()=>{
                         try {
                             const fdata = {
                                 id: id,
@@ -55,12 +55,12 @@ const Edit = () => {
                                 })
                             }
                         } catch (error) {
-                            alert(error)
+                            console.log(error);
                         }
                     }}/>
                 </View>
             ))}
-        </View>
+        </ScrollView>
     )
 }
 
@@ -69,11 +69,11 @@ export default Edit
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        marginTop: 20,
-        paddingTop:100,
-        paddingHorizontal: 10
+        justifyContent:'center',
+        alignItems:'center',
+        paddingHorizontal:10
     },
     title: {
-        marginHorizontal: 10
+        marginVertical:20
     }
 })
