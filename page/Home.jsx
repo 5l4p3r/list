@@ -38,22 +38,29 @@ const Home = () => {
     return (
         <View style={styles.container}>
             <StatusBar style="auto"/>
-            <Header
-                backgroundColor="white"
-                leftComponent={<Icon name='home'/>}
-                centerComponent={<Text h4>List Content</Text>}
-                rightComponent={<Icon name='pluscircleo' type="antdesign"/>}
-            />
             <SearchBar
+                containerStyle={{backgroundColor: 'white',paddingHorizontal:10}}
                 placeholder="Search..." 
                 value={search} 
                 onChangeText={(e)=>setSearch(e)}/>
             {frm &&
                 <View style={styles.form}>
                     <Text h4>Create List</Text>
-                    <Input placeholder="Title" onChangeText={e=>setTitle(e)}/>
-                    <Input placeholder="Content" numberOfLines={4} multiline={true} onChangeText={e=>setContent(e)}/>
-                    <Button title="CREATE" type="outline" onPress={()=>{
+                    <Input
+                        containerStyle = {{borderRadius:10, height:50, borderWidth:1, marginBottom:10}}
+                        placeholder="Title" 
+                        onChangeText={e=>setTitle(e)}
+                    />
+                    <Input
+                        containerStyle = {{borderRadius:10, borderWidth:1,marginBottom:10}}
+                        placeholder="Content" 
+                        numberOfLines={4} 
+                        multiline={true} 
+                        onChangeText={e=>setContent(e)}
+                    />
+                    <Button title="CREATE" type="outline" 
+                        containerStyle={{ backgroundColor:'#28FFBF' }} 
+                        onPress={()=>{
                         if(title === '' || content === ''){
                             alert('Form is empty !')
                         }else{
@@ -89,11 +96,7 @@ const Home = () => {
             </PTRView>
             <View style={styles.fab}>
                 <Icon name="pluscircleo" size={40} type="antdesign" onPress={()=>{
-                    if(frm){
-                        setFrm(false)
-                    }else{
-                        setFrm(true)
-                    }
+                    setFrm(!frm)
                 }}/>
             </View>
         </View>
@@ -105,7 +108,7 @@ export default Home
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        paddingBottom:20
+        paddingTop:20
     },
     search: {
         marginHorizontal:10,
@@ -118,7 +121,9 @@ const styles = StyleSheet.create({
         bottom: 10,
     },
     form: {
-        paddingHorizontal:10,
-        marginVertical: 10
+        padding: 10,
+        margin:10,
+        backgroundColor: '#F7E6AD',
+        borderRadius: 10
     }
 })

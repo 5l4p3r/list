@@ -124,13 +124,13 @@ const App = () => {
         <Icon name="message1" size={76} type="antdesign"/>
         <Text h4>Login System</Text>
         <Input
-          autoCompleteType='email'
+          containerStyle = {{borderRadius:10, height:50, borderWidth:1, margin:10}}
           placeholder="Email"
           leftIcon={<Icon name='mail' type="antdesign" size={30}/>}
           value={email}
           onChangeText={(e)=>setEmail(e)}/>
         <Input
-          autoCompleteType='password'
+          containerStyle = {{borderRadius:10, height:50, borderWidth:1, margin:10, underlineColorAndroid:'#28FFBF'}}
           placeholder="Password" 
           secureTextEntry={show}
           leftIcon={<Icon name='key' type="antdesign" size={30}/>}
@@ -143,7 +143,11 @@ const App = () => {
           }} />}
           value={password}
           onChangeText={(e)=>setPassword(e)}/>
-        <Button title="LOGIN" type="clear" onPress={()=>login()}/>
+        <Button
+          containerStyle={{ width:'100%',backgroundColor:'#28FFBF' }}
+          title="LOGIN"
+          type="outline" onPress={()=>login()}
+        />
       </View>
     )
   }
@@ -155,13 +159,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent:'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginHorizontal:10
   },
   nav: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     position:'relative',
-    marginHorizontal:20,
-    paddingBottom: 10
+    padding: 10,
   },
 })

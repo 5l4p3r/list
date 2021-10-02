@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { StatusBar } from 'expo-status-bar'
 import React, { useContext, useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button,Text} from 'react-native-elements'
@@ -24,6 +25,7 @@ const Detail = () => {
     },[])
     return (
         <ScrollView>
+            <StatusBar style="auto"/>
             {article.map((l,i)=>(
                 <View key={i} style={styles.container}>
                     <Text h4>{l.title}</Text>
