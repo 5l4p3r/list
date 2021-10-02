@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button, Input, Text } from 'react-native-elements'
 import { useHistory, useParams } from 'react-router'
-import { UserContext } from '../hooks/UserContext'
 
 const Edit = () => {
     const url = "https://sanctumtyo.herokuapp.com"

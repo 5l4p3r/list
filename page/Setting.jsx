@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StatusBar } from 'expo-status-bar'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Button, FAB, Text } from 'react-native-elements'
+import { Button,Text } from 'react-native-elements'
 import { useHistory } from 'react-router'
 import { UserContext } from '../hooks/UserContext'
 
@@ -11,8 +11,8 @@ const Setting = () => {
     const keluar = async() => {
         try {
             AsyncStorage.removeItem('key')
-            AsyncStorage.removeItem('name')
-            AsyncStorage.removeItem('photo')
+            AsyncStorage.removeItem('@id')
+            AsyncStorage.removeItem('@user')
             return true
         } catch (error) {
             console.log(error);
@@ -25,21 +25,22 @@ const Setting = () => {
                 <View style={styles.container}>
                     <StatusBar style="auto"/>
                     <View style={styles.logout}>
-                        <FAB title="Logout"
-                            type='clear'
-                            onPress={()=>{setVis(true)
-                        }}/>
+                        <Button title="Logout" type="clear" onPress={()=>setVis(true)}/>
                     </View>
                     {vis &&
-                        <View style={styles.content}>
-                            <Text h4>Logout ?</Text>
-                            <View style={styles.group}>
-                                <Button title="Yes" size={50} type="clear" style={styles.groupItem} onPress={async()=>{
-                                    keluar()
-                                    setMessage(null)
-                                    history.push('/')
-                                }}/> 
-                                <Button title="No" size={50}  type="clear" style={styles.groupItem} onPress={()=>setVis(false)}/>
+                        <View style={{flex:1}}>
+                            <View style={styles.content}>
+                                <View style={{alignItems:'center'}}>
+                                    <Text h4>Logout ?</Text>
+                                </View>
+                                <View style={styles.group}>
+                                    <Button title="Yes" size={50} type="clear" style={styles.groupItem} onPress={async()=>{
+                                        keluar()
+                                        setMessage(null)
+                                        history.push('/')
+                                    }}/> 
+                                    <Button title="No" size={50}  type="clear" style={styles.groupItem} onPress={()=>setVis(false)}/>
+                                </View>
                             </View>
                         </View>
                     }
@@ -63,13 +64,10 @@ const styles = StyleSheet.create({
     },
     content: {
         flex:12,
-        justifyContent:'center',
-        alignItems: 'center',
     },
     group: {
-        justifyContent:'space-around',
+        justifyContent:'space-evenly',
         flexDirection:'row',
-        height: 100
     },
     groupItem: {
         marginHorizontal: 30

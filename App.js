@@ -11,7 +11,6 @@ import Home from './page/Home'
 import Profile from './page/Profile'
 import Setting from './page/Setting'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Add from './article/Add'
 import { StatusBar } from 'expo-status-bar'
 
 const App = () => {
@@ -34,11 +33,11 @@ const App = () => {
       await axios.post(`${url}/api/login`,fdata).then(async(res)=>{
         setMessage(res.data.message)
         await AsyncStorage.setItem("key", res.data.message)
+        setUserid(res.data.id)
         let resp = await axios.get(`${url}/api/profile/${res.data.id}`)
         setUser(resp.data)
         resp.data.map(async(item)=>{
           await AsyncStorage.setItem('@id',JSON.stringify(item.id))
-          setUserid(item.id)
         })
         await AsyncStorage.setItem('@user',JSON.stringify(resp.data))
       })
@@ -99,7 +98,6 @@ const App = () => {
           <Route path="/profile" component={Profile}/>
           <Route path="/about" component={About}/>
           <Route path="/setting" component={Setting}/>
-          <Route path="/article/add" component={Add}/>
           <Route path="/article/:id" component={Detail}/>
           <Route path="/articleupdate/:id" component={Edit}/>
           <View style={styles.nav}>
@@ -123,14 +121,18 @@ const App = () => {
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
-        <Icon name="wordfile1" size={76} type="antdesign"/>
+        <Icon name="message1" size={76} type="antdesign"/>
         <Text h4>Login System</Text>
-        <Input 
+        <Input
+          autoCompleteType='email'
           placeholder="Email"
           leftIcon={<Icon name='mail' type="antdesign" size={30}/>}
           value={email}
           onChangeText={(e)=>setEmail(e)}/>
-        <Input placeholder="Password" secureTextEntry={show}
+        <Input
+          autoCompleteType='password'
+          placeholder="Password" 
+          secureTextEntry={show}
           leftIcon={<Icon name='key' type="antdesign" size={30}/>}
           rightIcon={<Icon name="eye" type="antdesign" size={30} onPress={()=>{
             if(show){
@@ -158,13 +160,8 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
-    height: 40,
     position:'relative',
-    marginBottom:10,
-    marginHorizontal:10
+    marginHorizontal:20,
+    paddingBottom: 10
   },
-  navItem: {
-    backgroundColor:'red'
-  }
 })
